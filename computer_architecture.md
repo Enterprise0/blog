@@ -2,8 +2,8 @@
 
 <!-- code_chunk_output -->
 
-- [指令集架构ISA](#指令集架构isa)
-- [流水线（pipelining）](#流水线pipelining)
+- [## 指令集架构ISA](#-指令集架构isa)
+- [## 流水线（pipelining）](#-流水线pipelining)
 - [魔术代码（magic code）：](#魔术代码magic-code)
 
 <!-- /code_chunk_output -->
@@ -17,7 +17,7 @@
 
 - load-store型处理器：所有计算都在寄存器中进行，内存中的数据要先移到寄存器中。
 
-- CISC（complex instruction set computer)复杂指令集计算机：Intel和AMD的X86架构。
+- CISC（complex instruction set computer)复杂指令集计算机：Intel的IA32（Intel Architecture 32-bit）架构，Intel和AMD的X86-64架构。
     RISC（reduced instruction set computer)精简指令集计算机：MIPS、ARM、RISC-V架构。（前两者是定长指令）。
 
 - ARM有16个通用寄存器。ARM所有指令和字（32位）数据必须按4字节对齐存放，PC每次+4，反汇编时每4个字节反汇编一次。
@@ -38,3 +38,5 @@
 
 
 ## 魔术代码（magic code）：
+
+## 动态分配和静态分配内存
