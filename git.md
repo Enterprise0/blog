@@ -8,6 +8,7 @@
 - [删除文件](#删除文件)
 - [分支](#分支)
 - [保存工作现场](#保存工作现场)
+- [合并提交](#合并提交)
 
 <!-- /code_chunk_output -->
 
@@ -69,11 +70,12 @@ git checkout -b <branch> <remote branch> # 创建并切换分支，添加<remote
 git switch <branch> # 切换分支
 git switch -c <branch> # 创建并切换分支
 git merge <branch> # 合并指定分支到当前分支
+git cherry-pick <commit id> # 复制指定commit到当前分支
 ```
 
 - 如果要合并的两个分支都有新的commit，合并的使用要手动解决冲突。
 - 合并时：--no-ff，git log会显示删除的分支记录
-
+- main：稳定分支。dev：不稳定分支。其他分支为bug修复或添加新特性。
 
 ## 保存工作现场
 ----
@@ -85,3 +87,20 @@ git stash pop # 恢复并删除
 git stash apply <stash@{0}> # 恢复指定的stash
 git cherry-pick <commit> # 复制提交到当前分支，但是复制后提交的版本号不一样，是2个提交
 ```
+
+## 合并提交
+----
+```bash
+git rebase -i <commit id> # 合并head到commit id-1
+git rebase --continue
+git rebase --bort
+```
+
+- pick：保留该commit（缩写:p）
+- reword：保留该commit，并修改该commit的注释（缩写:r）
+- edit：保留并修改该commit(不仅仅修改注释)（缩写:e）
+- squash：将该commit和前一个commit合并（缩写:s）
+- fixup：将该commit和前一个commit合并，但不保留该commit的message（缩写:f）
+- exec：执行shell命令（缩写:x）
+- drop：丢弃该commit（缩写:d）
+>在确保没有问题前不要push到main，好习惯应该是新建分支，确保无误后合并到main。
