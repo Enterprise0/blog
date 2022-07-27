@@ -5,9 +5,9 @@
 - [todo](#todo)
 - [基本知识](#基本知识)
 - [飞行模式](#飞行模式)
-  - [position mode](#position-mode)
-  - [altitude mode](#altitude-mode)
-  - [manual/stabilized mode](#manualstabilized-mode)
+  - [position mode定点模式](#position-mode定点模式)
+  - [altitude mode定高模式](#altitude-mode定高模式)
+  - [manual/stabilized mode手动/自稳模式](#manualstabilized-mode手动自稳模式)
 - [LED状态指示灯](#led状态指示灯)
   - [UI LED（集成在gps上）](#ui-led集成在gps上)
   - [Status LED（飞控硬件上）](#status-led飞控硬件上)
@@ -31,19 +31,19 @@
 ----
 多旋翼飞行器自主模式下移动摇杆会默认进入`position`模式。
 
-### position mode
+### position mode定点模式
 
 最安全容易的手动模式，`需要gps。`
 
 油门控制上升/下降速度，yaw控制水平旋转角速度，roll和pitch分别控制相对于地面的左右、前后加速度。释放摇杆时会锁定在当前位置，不会被风等因素影响。
 
-### altitude mode
+### altitude mode定高模式
 最安全容易的`无gps`的手动模式。
 
 油门控制上升/下降速度，yaw控制水平旋转角速度，roll和pitch控制对应角度。释放摇杆时会锁定在当前高度， 但前后和左右方向会被风和摇杆回中前的动量等因素影响。
 
-### manual/stabilized mode
-比较难飞，不推荐新手用这种模式。
+### manual/stabilized mode手动/自稳模式
+比较难飞，不推荐新手用这种模式。需要自己控制油门保持高度。
 
 油门控制上升/下降速度，yaw控制水平旋转角速度，roll和pitch控制对应角度。在有外力（风）干扰时，需要手动修正油门和ypr轴。
 
