@@ -22,6 +22,7 @@ git pull <remote branch> <branch>
 git push # 推送指定分支：git push origin <branch>
 git add <files> # 存入暂存区，跟踪文件
 git commit -m <message> # 提交到分支
+git commit --amend # 追加到上一次提交
 git log # 记录commit，版本回退记录也会回退
 git reflog # 记录每一次命令，用于寻找回退前的版本
 ```
