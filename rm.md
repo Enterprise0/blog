@@ -20,6 +20,20 @@
 
 
 
+# CAN
+----
+1. [C620调整终端电阻](https://bbs.robomaster.com/thread-12094-1-1.html)
+
+2. [示波器看CAN终端电阻的作用](https://zhuanlan.zhihu.com/p/26096996)
+
+3. [RM没必要使用CANopen](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=7367)：CANopen也是在CAN2.0基础上，将11位的标识符重新定义了一下，然后定义了几个通信对象（PDO,SDO,NMT），然后还有对象字典可以存储设备的很多信息，主站可以读写设备的一些信息。如果有好多设备，分布式系统，对实时性要求不是很高，可以采用CANopen。RM的话，其实没有那么多设备，也不需要对象字典来存储那么多信息，另外生产CANopen的厂家都必须向CiA协会申请唯一的厂商代码，其他应该也要服从协会的一些规定，对于自己开发的话可能用不太到。其实自己开发的话，完全可以在CAN的11位标识符很和8字节的数据上做文章，设计自己的应用层协议。
+
+4. [CANOpen系列教程](https://www.strongerhuang.com/CANOpen/CANOpen%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B.html)
+
+5. CANopen轻松入门周立功
+
+
+
 # rm2023工程电控培训
 ----
 1. 工程代码框架、命名规范和布线。暑假先重新阅读官方例程和开源代码，官方例程有一点臃肿。阅读完代码后再统一代码框架和命名规范等。可以先修改本赛季工程代码用于调试，但是后面要按照规定的代码框架重写。要有一套能够传承下去的代码框架。
@@ -66,4 +80,37 @@
 
 4. 陀螺仪尽量安装在车子中轴线，远离震动源。MEMS陀螺仪会收到加速度干扰。
 
+## 强队电控开源代码
+1. 华南虎
+    - [2021英雄](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12215)
+    - [2021舵轮步兵](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12207)
 
+2. 深大
+    - [2021英雄](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12319)
+    - [2021双云台哨兵](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12293)
+    - [2021双枪舵轮步兵](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12265)
+    - [2021麦轮步兵电控](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12262)
+
+3. 浙大
+    - [2021哨兵全套](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=6932) 电控代码丢失
+
+4. 杭电
+    - [2021麦轮、舵轮、全向轮底盘解算](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=17629)
+
+5. 西北工业大学
+    - [2021步兵电控](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12255)
+
+6. 东北大学
+    - [2021双枪步兵电控](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=12290)
+
+### 电控小知识之电控视觉联调
+[电控小知识之电控视觉联调](https://www.bilibili.com/video/BV1T5411K7nP/?spm_id_from=333.999.0.0&vd_source=b037d71dfcc90a4fe87a5c511ca50806)
+1. 机械在sw设计的时候，要和电控视觉讨论布线，主要是电控。
+
+2. 子弹出膛瞬间动量变化导致云台pitch轴角度发生变化的问题，如果通过机械上保证子弹初速度矢量与pitch轴转轴重合的话，感觉会比追求抗扰性能更好的控制算法更有效些。
+
+3. 调通信的时候可以单独拿一块板来调 
+
+4. 调视觉识别最好电控和视觉都在，在用pc（不是车上的视觉主机）调的时候准备一条比较长的线（比如2m），防止疯车的时候扯断线。
+
+5. 布完线后让老队员检查一遍。
