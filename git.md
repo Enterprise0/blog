@@ -2,28 +2,22 @@
 
 <!-- code_chunk_output -->
 
-- [git常用命令](#git常用命令)
-- [commit、pull and push](#commit-pull-and-push)
-- [远程库](#远程库)
-- [版本回退和撤销修改](#版本回退和撤销修改)
-- [删除文件](#删除文件)
-- [分支](#分支)
-- [保存工作现场](#保存工作现场)
-- [合并提交](#合并提交)
-- [标签](#标签)
+- [## diff and log](#-diff-and-log)
+- [## commit、pull and push](#-commitpull-and-push)
+- [## 远程库](#-远程库)
+- [## 版本回退、撤销修改和删除文件](#-版本回退撤销修改和删除文件)
+- [## 分支](#-分支)
+- [## 保存工作现场（临时修改bug时用到）](#-保存工作现场临时修改bug时用到)
+- [## 合并提交](#-合并提交)
+- [## 标签](#-标签)
 - [merge/pull request](#mergepull-request)
 
 <!-- /code_chunk_output -->
 
 
-## git常用命令
+## diff and log
 ----
 ```bash
-git init
-git clone
-git add <files> # 存入暂存区，跟踪文件
-git commit -m <message> # 提交到分支
-git status
 git diff # 查看工作区距离上一次commit后的修改
 git diff <HEAD/commit id> -- <file> # 查看工作区和特定版本的文件的修改
 git log # 记录commit，版本回退记录也会回退
@@ -49,22 +43,17 @@ git remote -v # 查看关联仓库
 git remote rm origin # 取消关联，github仓库还存在
 ```
 
-## 版本回退和撤销修改
+## 版本回退、撤销修改和删除文件
 ----
 ```bash
 git reset --hard HEAD^ # 回退到上一个版本
 git reset --hard <commit id> # 回退到特定版本
 git checkout -- <file> # 撤销工作区修改，回到最近一次commit/add状态
 git reset HEAD <file> # 撤销暂存区修改，回到工作区
+rm <file> 后 git rm <file> # 从版本库中删除文件
 ```
 - HEAD表示当前版本，HEAD^上个版本，HEAD^^上上版本，HEAD~100上100个版本。
 - 可以使用版本号的前几个字符回退和取消回退指定版本
-
-## 删除文件
-----
-```bash
-rm <file> 后 git rm <file> # 从版本库中删除文件
-```
 
 ## 分支
 ----
@@ -91,7 +80,7 @@ git cherry-pick <commit id> # 复制指定commit到当前分支,但是复制后c
 - 合并时：--no-ff，git log会显示删除的分支记录
 - main：稳定分支。dev：不稳定分支。其他分支为bug修复或添加新特性。
 
-## 保存工作现场
+## 保存工作现场（临时修改bug时用到）
 ----
 ```bash
 git stash # 保存工作内容
