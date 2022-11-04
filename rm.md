@@ -17,6 +17,7 @@
 # CAN
 ----
 1. [C620调整终端电阻](https://bbs.robomaster.com/thread-12094-1-1.html)
+can网络里面有两个终端电阻就够了，线长短不一样更改一下阻抗匹配，用示波器看一下can上面的信号质量调整一下终端电阻数量至波形稳定就好了
 
 2. [示波器看CAN终端电阻的作用](https://zhuanlan.zhihu.com/p/26096996)
 
@@ -28,7 +29,7 @@
 
 
 
-# 论坛开源资料（官方ICRA步兵开源项目RoboRTS）
+# 论坛开源资料
 ----
 [论坛开源汇总](https://bbs.robomaster.com/forum.php?mod=viewthread&tid=6979&extra=page%3D1)
 
@@ -57,7 +58,7 @@
 
 
 ## RM圆桌第九期-PID控制深透析
-[链接](https://bbs.robomaster.com/thread-8106-1-1.html)
+[PID控制深透析](https://bbs.robomaster.com/thread-8106-1-1.html)
 
 1. 串级PID内环计算频率≥外环计算频率，在RM中=即可。
 
@@ -128,8 +129,11 @@
 
 ![speed3m/s](./pic/speed3.png)
 超调量：< 0.5%，但是上方的点过多
-
-- 不要一昧的增加P，当下方的点过多时存在静差，增加I。
+>3508反馈的转速是转子转速，C620下最大转速（空载）482*（3591/187）（减速比）rpm
+- 不要一昧的增加P，当下方的点过多时存在静差，增加I。 
+- 增加开环增益P只能减小稳态误差，或者减缓稳态误差趋于无穷大时的速率（稳态误差有三种情况：0、大于0、无穷大）。
+- 加入I相当于增加串联积分环节，可以消除稳态误差，改变系统无静差度。 
+- 适当选取Kp和Kd可以增大无阻尼振荡角频率$ w_n $和阻尼比$  $（以标准二阶系统为例），改善系统快速性和平稳性。但是PD控制器会向系统传递函数引入一个零点。
 
 ## 电机编码器计算角度
 ```c
@@ -157,18 +161,17 @@ static fp32 motor_ecd_to_angle_change(uint16_t ecd, uint16_t offset_ecd)
 云台的参数调节除了和PID参数有关之外，还和控制周期，传感器反馈频率，器件热噪声大小等因素有关，有的时候其实不需要复杂的参数就能有很好的控制效果
 
 ## 过零检测
-[RM电机过零检测](http://t.csdn.cn/lpQpp)
+[串级PID及角度过零处理](https://blog.csdn.net/qq_38972634/article/details/117036117?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-117036117-blog-115335500.pc_relevant_3mothn_strategy_and_data_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-117036117-blog-115335500.pc_relevant_3mothn_strategy_and_data_recovery&utm_relevant_index=13)
 
 ## 姿态解算（融合）
 
 ## PID
 - 位置式PID：
-$ u(k) = K_p e(t) + K_i\sum_{i=0}^{k}e(i) + K_d[e(k)-e(k-1)]  $
+$ u(k) = K_p e(k) + K_i\sum_{i=0}^{k}e(i) + K_d[e(k)-e(k-1)]  $
 需要输出限幅、积分限幅。当输出饱和时，不加积分限幅会出现积分饱和。常见的抗积分饱和方法：积分分离法(e(k)绝对值大于阈值时只用PD)、遇限削弱积分法（积分限幅）、变速积分法（加强版的积分分离法)
 
 - 增量式PID：
-$ \Delta u(k) = u(k)-u(u-1) = K_p[e(k)-e(k-1)] + K_ie(k) + K_d[e(k)-2e(k-1)+e(k-2)]$
-$ u(k) = u(k-1)+\Delta u(k) = $
+$ \Delta u(k) = u(k)-u(u-1) \\= K_p[e(k)-e(k-1)] + K_ie(k) + K_d[e(k)-2e(k-1)+e(k-2)] $
 只需要输出限幅。
 
 
@@ -176,19 +179,16 @@ $ u(k) = u(k-1)+\Delta u(k) = $
 # 视觉
 ----
 1. 了解CV和RoboMaster视觉组
-[github]https://github.com/NeoZng/vision_tutorial/tree/v1.0.0
+[github](https://github.com/NeoZng/vision_tutorial/tree/v1.0.0)
 [csdn](https://blog.csdn.net/neozng/category_11397138.html)
 
-2. Robomaster——关于视觉组，你想要了解的都在这里
-[Robomaster——关于视觉组，你想要了解的都在这里](https://blog.csdn.net/weixin_42754478/article/details/108159529?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166678991916782414967359%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=166678991916782414967359&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-108159529-null-null.142^v62^pc_search_tree,201^v3^control_2,213^v1^t3_esquery_v1&utm_term=Robomaster%E2%80%94%E2%80%94%E5%85%B3%E4%BA%8E%E8%A7%86%E8%A7%89%E7%BB%84%EF%BC%8C%E4%BD%A0%E6%83%B3%E8%A6%81%E4%BA%86%E8%A7%A3%E7%9A%84%E9%83%BD%E5%9C%A8%E8%BF%99%E9%87%8C&spm=1018.2226.3001.4187)
-
-3. RoboMaster机甲大师——视觉组——总结、未来期望与比赛经验分享
+2. RoboMaster机甲大师——视觉组——总结、未来期望与比赛经验分享
 [RoboMaster机甲大师——视觉组——总结、未来期望与比赛经验分享](https://blog.csdn.net/whl970831/article/details/108851630?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522166678998216782414980789%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=166678998216782414980789&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-108851630-null-null.142^v62^pc_search_tree,201^v3^control_2,213^v1^t3_esquery_v1&utm_term=RoboMaster%E6%9C%BA%E7%94%B2%E5%A4%A7%E5%B8%88%E2%80%94%E2%80%94%E8%A7%86%E8%A7%89%E7%BB%84%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93%E3%80%81%E6%9C%AA%E6%9D%A5%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%AF%94%E8%B5%9B%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB&spm=1018.2226.3001.4187)
 
-4. RoboMaster视觉教程——浙大
+3. RoboMaster视觉教程——浙大
 [RoboMaster视觉教程——浙大](https://blog.csdn.net/u010750137/category_8994384.html)
 
-5. RM圆桌005 | 抢人头要靠自瞄
+4. RM圆桌005 | 抢人头要靠自瞄
 [RM圆桌005 | 抢人头要靠自瞄](https://www.robomaster.com/zh-CN/resource/pages/activities/1009)
    - 自瞄一般思路：设置合适的相机帧率和曝光时间，图像预处理（颜色分割、二值化），灯条提取（findContours），装甲板识别（条件约束），云台控制。
    - 摄像头参数：较高帧率和较低的曝光时间,可以避免过多噪声，防止运动过快导致图像模糊，这些参数需要在不同光照条件下进行测试调参。一般工业相机帧数100hz。
@@ -197,14 +197,14 @@ $ u(k) = u(k-1)+\Delta u(k) = $
    - 算法鲁棒性：充分测试各种环境下的识别率。调整摄像头的参数，提高算法的鲁棒性，在比赛条件下通过录像后期调试，测试场地时最好能实现远程调试。
    - 预测：算法相对控制存在延迟，加入预测来补偿延迟。但是要先保证算法的实时性再考虑。
 
-6. RM圆桌008 | 如何击打大风车
+5. RM圆桌008 | 如何击打大风车
 [RM圆桌008 | 如何击打大风车](https://www.robomaster.com/zh-CN/resource/pages/activities/1015)
    - 相机焦距8mm，安装在底盘有助于打符。
    - 重力补偿：参考RoboRTS的抛物线弹道修正模型。简化模型，定点打靶，建立一个pitch偏移表，通过偏移量查表来进行补偿。
    - 相机标定误差：多次标定，去掉偏差较大的标定结果，取中位标定结果。
    - 等子弹打出去再发送下一次的预测位置。
 
-7. 官方ICRA步兵开源项目RoboRTS
+6. 官方ICRA步兵开源项目RoboRTS
 [官方ICRA步兵开源项目RoboRTS](https://github.com/RoboMaster/RoboRTS)
    - 有一个抛物线弹道修正模型
 
