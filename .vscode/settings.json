@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "struct_typedef.h": "c",
+        "gimbaltask.h": "c"
+    }
+}
