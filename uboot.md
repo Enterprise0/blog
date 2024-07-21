@@ -1,4 +1,4 @@
-## uboot启动方式
+# uboot启动方式
 因为nandflash没有地址总线，所以不能直接在nandflash中运行，
 选择这种上电方式后会将nandflash前4k拷贝到RAM中。
 
@@ -13,7 +13,33 @@ cpu会在norflash上执行。
 
 目前uboot也可以使用设备树的方式配置该阶段需要使用的驱动参数。
 
-## 设备树
+
+
+# IMX6ULL BOOT
+参考`i.MX 6UltraLite Applications Processor Reference Manual` Chapter 8 System Boot
+
+1. boot flow：
+```mermaid
+graph LR  
+1(iROM) --> 2(boot device)
+```
+
+2. iROM/RAM memory map：
+<div align=center><img src=./pic/IMX6ULL%20Internal%20ROM%20and%20RAM%20memory%20map.png/></div>
+
+3. 部分boot device：
+    - NOR Flash Boot Operation
+    ![NOR Flash Boot Operation](./pic/NOR%20Flash%20Boot%20Operation.png)
+
+    - Expansion Device Boot Operation
+    ![Expansion Device Boot Operation](./pic/Expansion%20Device%20Boot%20Operation.png)
+
+4. Image Vector Table and Boot Data
+<div align=center><img src=./pic/Image%20Vector%20Table%20and%20Boot%20Data.png/></div>
+
+
+
+# 设备树
 linux首先引入设备树，然后uboot引入。
 
 aarch64一开始设备驱动和参数是写死的，但是不同的arm开发板有不同的硬件，会造成代码臃肿。
