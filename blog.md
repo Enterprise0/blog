@@ -33,10 +33,18 @@ void func(T&& value)
 ```
 
 ## std::move
-移动const对象，实际调用的是拷贝构造函数。如果拷贝构造函数被delete,编译会报错
+移动const对象，实际调用的是拷贝构造函数。如果拷贝构造函数被delete,编译会报错。
+std::move应该用在有移动构造函数的类型中，否则和普通拷贝构造一样。
 
 ## constexpr
 C++11中的constexpr指定的函数返回值和参数必须要保证是字面值，而且必须有且只有一行return代码。所以编译器在编译期间会尝试优化。
 
 ## string_view
 [https://segmentfault.com/a/1190000018387368](https://segmentfault.com/a/1190000018387368)
+
+## 构造函数的线程安全
+![构造期间不要泄露this指针](./pic/object%20construct%20thread%20safe.png)
+即使构造函数的最后一行也不要泄露 this,因为 Foo 有可能是个基类。
+基类先于派生类构造,执行完 Foo::Foo() 的最后一行代码还会继续执行派生类的构造函数。
+这时 most-derived class 的对象还处于构造中,仍然不安全。
+>如果不用二段式构造`构造函数 +initialize()`，并且在 most-derived class 的最后泄漏this是否有可能线程安全。
