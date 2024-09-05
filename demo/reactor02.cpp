@@ -48,22 +48,22 @@ void handleEvents(int epoll_fd, int server_fd, int thread_id, std::vector<int>& 
             if (bytes_read == -1)
             {
                 spdlog::error("thread {} Error reading from client socket: {}", thread_id, strerror(errno));
-                close(events[i].data.fd);
                 {
                     std::lock_guard<std::mutex> lock(mtx);
                     removeClient(events[i].data.fd);
                 }
+                close(events[i].data.fd);
                 continue;
             }
 
             if (bytes_read == 0)
             {
                 // Client disconnected
-                close(events[i].data.fd);
                 {
                     std::lock_guard<std::mutex> lock(mtx);
                     removeClient(events[i].data.fd);
                 }
+                close(events[i].data.fd);
                 continue;
             }
 

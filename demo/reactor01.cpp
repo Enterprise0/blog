@@ -31,22 +31,22 @@ void handleEvents(int epoll_fd, int server_fd, int thread_id, std::vector<int>& 
             if (bytes_read == -1)
             {
                 spdlog::error("thread {} Error reading from client socket: {}", thread_id, strerror(errno));
-                close(events[i].data.fd);
                 {
                     std::lock_guard<std::mutex> lock(mtx);
                     client_fds.erase(std::remove(client_fds.begin(), client_fds.end(), events[i].data.fd), client_fds.end());
                 }
+                close(events[i].data.fd);
                 continue;
             }
 
             if (bytes_read == 0)
             {
                 // Client disconnected
-                close(events[i].data.fd);
                 {
                     std::lock_guard<std::mutex> lock(mtx);
                     client_fds.erase(std::remove(client_fds.begin(), client_fds.end(), events[i].data.fd), client_fds.end());
                 }
+                close(events[i].data.fd);
                 continue;
             }
 
