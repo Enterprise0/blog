@@ -15,14 +15,14 @@ const int MAX_CLIENTS = 10;
 
 std::mutex mtx; // Mutex to protect client_fds
 
-void handleEvents(int epoll_fd, int socket_fd, int thread_id, std::vector<int>& client_fds)
+void handleEvents(int epoll_fd, int server_fd, int thread_id, std::vector<int>& client_fds)
 {
     struct epoll_event events[MAX_EVENTS];
     int num_events = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
 
     for (int i = 0; i < num_events; ++i)
     {
-        if (events[i].data.fd != socket_fd &&
+        if (events[i].data.fd != server_fd &&
             events[i].data.fd % MAX_CLIENTS == thread_id)
         {
             // Read data from client socket
@@ -56,11 +56,11 @@ void handleEvents(int epoll_fd, int socket_fd, int thread_id, std::vector<int>& 
     }
 }
 
-void worker(int epoll_fd, int socket_fd, int thread_id, std::vector<int>& client_fds)
+void worker(int epoll_fd, int server_fd, int thread_id, std::vector<int>& client_fds)
 {
     while (true)
     {
-        handleEvents(epoll_fd, socket_fd, thread_id, client_fds);
+        handleEvents(epoll_fd, server_fd, thread_id, client_fds);
     }
 }
 
