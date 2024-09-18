@@ -48,3 +48,6 @@ C++11中的constexpr指定的函数返回值和参数必须要保证是字面值
 基类先于派生类构造,执行完 Foo::Foo() 的最后一行代码还会继续执行派生类的构造函数。
 这时 most-derived class 的对象还处于构造中,仍然不安全。
 >如果不用二段式构造`构造函数 +initialize()`，并且在 most-derived class 的最后泄漏this是否有可能线程安全。
+
+## 弱回调
+在std::bind中绑定shared_ptr，会延长shared_ptr对象的生命期。可以使用weak_ptr，并在回调函数中lock()尝试提升。
