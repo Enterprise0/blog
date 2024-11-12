@@ -51,3 +51,7 @@ C++11中的constexpr指定的函数返回值和参数必须要保证是字面值
 
 ## 弱回调
 在std::bind中绑定shared_ptr，会延长shared_ptr对象的生命期。可以使用weak_ptr，并在回调函数中lock()尝试提升。
+
+## NXP module_fuse
+[[U-Boot] [PATCH 1/4] imx: add module fuse support](https://lists.denx.de/pipermail/u-boot/2019-July/378313.html)
+类似设备树？
