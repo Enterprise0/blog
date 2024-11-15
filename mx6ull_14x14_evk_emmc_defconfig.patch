@@ -1,0 +1,50 @@
+diff --git a/arch/arm/dts/imx6ul-14x14-evk.dtsi b/arch/arm/dts/imx6ul-14x14-evk.dtsi
+index 0789ca6ed6a..84d9369f54e 100644
+--- a/arch/arm/dts/imx6ul-14x14-evk.dtsi
++++ b/arch/arm/dts/imx6ul-14x14-evk.dtsi
+@@ -157,19 +157,19 @@
+ 		display-timings {
+ 			native-mode = <&timing0>;
+ 			timing0: timing0 {
+-			clock-frequency = <9200000>;
+-			hactive = <480>;
+-			vactive = <272>;
+-			hfront-porch = <8>;
+-			hback-porch = <4>;
+-			hsync-len = <41>;
+-			vback-porch = <2>;
+-			vfront-porch = <4>;
+-			vsync-len = <10>;
++			clock-frequency = <33300000>;
++			hactive = <800>;
++			vactive = <480>;
++			hfront-porch = <210>;
++			hback-porch = <46>;
++			hsync-len = <1>;
++			vback-porch = <23>;
++			vfront-porch = <22>;
++			vsync-len = <1>;
+ 
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+-			de-active = <1>;
++			de-active = <0>;
+ 			pixelclk-active = <0>;
+ 			};
+ 		};
+diff --git a/configs/mx6ull_14x14_evk_emmc_defconfig b/configs/mx6ull_14x14_evk_emmc_defconfig
+index 4b81d0ea72f..ad6fcc28570 100644
+--- a/configs/mx6ull_14x14_evk_emmc_defconfig
++++ b/configs/mx6ull_14x14_evk_emmc_defconfig
+@@ -54,8 +54,9 @@ CONFIG_DM_SPI_FLASH=y
+ CONFIG_SF_DEFAULT_SPEED=40000000
+ CONFIG_SPI_FLASH_STMICRO=y
+ CONFIG_PHYLIB=y
+-CONFIG_PHY_MICREL=y
+-CONFIG_PHY_MICREL_KSZ8XXX=y
++#CONFIG_PHY_MICREL=y
++#CONFIG_PHY_MICREL_KSZ8XXX=y
++CONFIG_PHY_REALTEK=y
+ CONFIG_DM_ETH=y
+ CONFIG_DM_ETH_PHY=y
+ CONFIG_FEC_MXC=y
