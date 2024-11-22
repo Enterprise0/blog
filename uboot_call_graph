@@ -1,0 +1,27 @@
+|--->reset(arch/arm/cpu/armv7/start.S)
+|
+|--->cpu_init_cp15()
+|
+|--->cpu_init_crit()
+|
+|--->_main(arch/arm/lib/crt0.S)
+       |
+       |--->board_init_f(common/board_f.c)
+       |         |
+       |         |--->fdtdec_setup(common/board_f.c)
+       |                   |
+       |                   |--->fdt_find_separate(): Find a devicetree at the end of the image
+       |                   |
+       |                   |--->fdtdec_prepare_fdt(): Check we have a valid fdt available to control U-Boot
+       |                   |
+       |                   |--->initf_dm(common/board_f.c)
+       |                           |
+       |                           |--->dm_init_and_scan(drivers/core/root.c)
+       |                                      |
+       |                                      |--->dm_init(drivers/core/root.c)
+       |                                              |
+       |                                              |--->device_bind_by_name(drivers/core/device.c)
+       |
+       |--->relocate_code()
+       |
+       |--->board_init_r()
