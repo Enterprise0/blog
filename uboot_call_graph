@@ -8,20 +8,41 @@
        |
        |--->board_init_f(common/board_f.c)
        |         |
-       |         |--->fdtdec_setup(common/board_f.c)
-       |                   |
-       |                   |--->fdt_find_separate(): Find a devicetree at the end of the image
-       |                   |
-       |                   |--->fdtdec_prepare_fdt(): Check we have a valid fdt available to control U-Boot
-       |                   |
-       |                   |--->initf_dm(common/board_f.c)
-       |                           |
-       |                           |--->dm_init_and_scan(drivers/core/root.c)
-       |                                      |
-       |                                      |--->dm_init(drivers/core/root.c)
-       |                                              |
-       |                                              |--->device_bind_by_name(drivers/core/device.c)
+       |         |--->fdtdec_setup(lib/fdtdec.c)
+       |         |          |
+       |         |          |--->fdt_find_separate(lib/fdtdec.c): Find a devicetree at the end of the image
+       |         |          |
+       |         |          |--->fdtdec_prepare_fdt(lib/fdtdec.c): Check we have a valid fdt available to control U-Boot
+       |         |          
+       |         |--->initf_dm(common/board_f.c)
+       |                 |
+       |                 |--->dm_init_and_scan(drivers/core/root.c)
+       |                            |
+       |                            |--->dm_init(drivers/core/root.c): set and init gd->uclass_root
+       |                            |        |
+       |                            |        |--->device_bind_by_name(drivers/core/device.c)
+       |                            |        |             |
+       |                            |        |             |--->lists_driver_lookup_name(drivers/core/lists.c): find driver by name
+       |                            |        |             |
+       |                            |        |             |--->device_bind_common(drivers/core/device.c): create and init device with driver and uclass
+       |                            |        |             |                                               find uclass by (struct driver*)->id
+       |                            |        |             |                                               init device plat,driver_data,name,ofnode,parent,driver,uclass...
+       |                            |        |             |
+       |                            |        |             |--->dev_set_ofnode(include/dm/device.h): set gd->dm_root->node_ to ofnode_root()
+       |                            |        |             |
+       |                            |        |             |--->device_probe(device/core/device.c): probe (struct udevice*)gd->dm_root
+       |                            |
+       |                            |--->dm_scan(drivers/core/root.c)
+       |                            |        |
+       |                            |        |--->dm_scan_plat(drivers/core/root.c): Runs through the driver_info tables and binds the devices it finds
+       |                            |        |
+       |                            |        |--->dm_extended_scan(drivers/core/root.c): Run through the devicetree nodes
+       |                            |        |
+       |                            |        |--->dm_scan_other(boot/bootstd-uclass.c): add special devices
+       |                            |        |
+       |                            |        |--->dm_probe_devices(drivers/core/root.c)
        |
        |--->relocate_code()
        |
        |--->board_init_r()
+
