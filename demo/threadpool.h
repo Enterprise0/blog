@@ -1,3 +1,6 @@
+#ifndef THREAD_POOL_H
+#define THREAD_POOL_H
+
 #include <condition_variable>
 #include <functional>
 #include <future>
@@ -6,24 +9,29 @@
 #include <queue>
 #include <thread>
 
-class threadpool {
+class ThreadPool {
 public:
-    threadpool(size_t n);
+    ThreadPool(size_t n);
 
-    ~threadpool();
+    ~ThreadPool();
 
     template <typename F, typename... Args>
     auto enqueue(F&& f, Args&&... args) -> std::future<decltype(f(args...))>;
 
+    ThreadPool(const ThreadPool&) = delete;
+    ThreadPool(ThreadPool&&) = delete;
+    ThreadPool& operator=(const ThreadPool&) = delete;
+
 private:
+    bool stop_;
     std::mutex mutex_;
     std::condition_variable cv_;
+
     std::vector<std::thread> worker_;
-    std::queue<std::function<void()>> taskQueue;
-    bool stop_;
+    std::queue<std::function<void()>> taskQueue_;
 };
 
-threadpool::threadpool(size_t n)
+ThreadPool::ThreadPool(size_t n)
     : stop_(false) {
     for (size_t i = 0; i < n; ++i) {
         worker_.emplace_back(std::thread([this] {
@@ -31,13 +39,12 @@ threadpool::threadpool(size_t n)
                 std::function<void()> task;
                 {
                     std::unique_lock<std::mutex> lk(mutex_);
-                    cv_.wait(lk, [this] { return stop_ || !taskQueue.empty(); });
-                    if (stop_) {
+                    cv_.wait(lk, [this] { return stop_ || !taskQueue_.empty(); });
+                    if (stop_ && taskQueue_.empty()) {
                         return;
-                    } else {
-                        task = std::move(taskQueue.front());
-                        taskQueue.pop();
                     }
+                    task = std::move(taskQueue_.front());
+                    taskQueue_.pop();
                 }
                 task();
             }
@@ -46,23 +53,22 @@ threadpool::threadpool(size_t n)
 }
 
 template <typename F, typename... Args>
-auto threadpool::enqueue(F&& f, Args&&... args) -> std::future<decltype(f(args...))> {
-    using return_type = typename std::future<decltype(f(args...))>;
+auto ThreadPool::enqueue(F&& f, Args&&... args) -> std::future<decltype(f(args...))> {
+    using return_type = decltype(f(args...));
 
-    auto task = std::make_shared<std::packaged_task<return_type(Args...)>>(
+    auto task = std::make_shared<std::packaged_task<return_type()>>(
         std::bind(std::forward<F>(f), std::forward<Args>(args)...));
 
-    return_type res = task.get_future();
     {
         std::lock_guard<std::mutex> lk(mutex_);
-        taskQueue.emplace([task]() { (*task)(); });
+        taskQueue_.emplace([task]() { (*task)(); });
     }
     cv_.notify_one();
 
-    return res;
+    return task->get_future();
 }
 
-threadpool::~threadpool() {
+ThreadPool::~ThreadPool() {
     {
         std::lock_guard<std::mutex> lk(mutex_);
         stop_ = true;
@@ -72,3 +78,17 @@ threadpool::~threadpool() {
         thread.join();
     }
 }
+
+/*
+int main(int argc, char** argv) {
+    ThreadPool pool(10);
+
+    std::vector<std::future<int>> res;
+    for (int i = 0; i < 100; ++i) {
+        res.emplace_back(pool.enqueue([i] { return i; }));
+    }
+
+    for_each(res.begin(), res.end(), [](std::future<int> &res) { std::cout << res.get() << " "; });
+}
+*/
+#endif /* THREAD_POOL_H */
