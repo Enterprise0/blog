@@ -55,3 +55,22 @@ C++11中的constexpr指定的函数返回值和参数必须要保证是字面值
 ## NXP module_fuse
 [[U-Boot] [PATCH 1/4] imx: add module fuse support](https://lists.denx.de/pipermail/u-boot/2019-July/378313.html)
 类似设备树？
+
+## 惊群效应
+[Linux 惊群效应之 Nginx 解决方案](https://zhuanlan.zhihu.com/p/51251700)
+
+## docker proxy config
+- daemon: /etc/docker/daemon.json
+- container: ~/.docker/config.json
+
+## ebpf
+```mermaid
+graph LR  
+1(bpftrace) --> 2(bcc) --> 3(libbpf) --> 4(kernel)
+5(eBPF Go Library) --> 4(kernel)
+```
+- ebpf handler参数中的ctx
+    You’d find the definition for this structure in the vmlinux header file generated for the particular kernel you’re running on. The art of writing eBPF programs includes working out what structure each program receives as its context, and how to access the information within it.
+
+- ebpf handler经常以static __always_inline开头
+    That forces the compiler to put the instructions for these functions inline, because in older kernels a BPF program is not allowed to jump to a separate function. Newer kernels and versions of LLVM can support noninlined function calls, but this is a safe way to ensure the BPF verifier stays happy.
